@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using BuildingBlocks.CQRS;
+using MediatR;
 
 namespace Catalog.API.Product.CreateProduct
 {
-    public class CreateProductCommand : IRequest<CreateProductResult>
+    public class CreateProductCommand : ICommand<CreateProductResult>
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = default!;
