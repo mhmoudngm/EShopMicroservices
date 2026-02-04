@@ -1,12 +1,18 @@
+using BuildingBlocks.Behaviors;
+using FluentValidation;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container. (dependency injection)
-
+var assembly = typeof(Program).Assembly;
 builder.Services.AddCarter();
 builder.Services.AddMediatR(config =>
 {
-    config.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    config.RegisterServicesFromAssembly(assembly);
+    config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
+builder.Services.AddValidatorsFromAssembly(assembly);
 //powerfull library that transform postgressql into .net transaction document db
 builder.Services.AddMarten(opts =>
 {

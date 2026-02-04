@@ -26,7 +26,7 @@ namespace Catalog.API.Products.UpdateProduct
             product.Imagefile = request.Imagefile;
 
             session.Update(product);
-            await session.SaveChangesAsync();
+            await session.SaveChangesAsync(cancellationToken);
             return new UpdateProductResult()
             {
                 IsSuccess = true,

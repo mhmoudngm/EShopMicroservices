@@ -17,7 +17,6 @@ namespace Catalog.API.Products.UpdateProduct
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Update Product")
             .WithDescription("Update Product");
-
         }
     }
 }
