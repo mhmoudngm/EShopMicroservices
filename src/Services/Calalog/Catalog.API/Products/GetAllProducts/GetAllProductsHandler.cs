@@ -1,5 +1,6 @@
 ﻿
 using Catalog.API.Models;
+using Marten.Pagination;
 
 namespace Catalog.API.Products.GetAllProducts
 {
@@ -8,7 +9,7 @@ namespace Catalog.API.Products.GetAllProducts
         private IDocumentSession _session;
         private readonly ILogger<GetAllProductsHandler> logger;
 
-        public GetAllProductsHandler(IDocumentSession session,ILogger<GetAllProductsHandler> logger)
+        public GetAllProductsHandler(IDocumentSession session, ILogger<GetAllProductsHandler> logger)
         {
             _session = session;
             this.logger = logger;
@@ -16,7 +17,7 @@ namespace Catalog.API.Products.GetAllProducts
         public async Task<GetAllProductsResult> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
             logger.LogInformation("get all products");
-            var records = await _session.Query<Catalog.API.Models.Product>().ToListAsync(cancellationToken);
+            var records = await _session.Query<Catalog.API.Models.Product>().ToPagedListAsync(request.PageNumber ?? 1, request.PageSize ?? 10, cancellationToken);
             return new GetAllProductsResult()
             {
                 Products = records

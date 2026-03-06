@@ -15,7 +15,7 @@ namespace Catalog.API.Products.DeleteProduct
         }
         public async Task<DeleteProductResult> Handle(DeleteProductCommand command, CancellationToken cancellationToken)
         {
-            logger.LogInformation($"Delete product with this info {command}");
+            // logger.LogInformation($"Delete product with this info {command}");
             //var product = await session.LoadAsync<Catalog.API.Models.Product>(command.Id);
             //if (product is null)
             //{

@@ -1,5 +1,4 @@
-using BuildingBlocks.Behaviors;
-using FluentValidation;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,12 +17,17 @@ builder.Services.AddMarten(opts =>
 {
     opts.Connection(builder.Configuration.GetConnectionString("Database")!);
 }).UseLightweightSessions();
+if (builder.Environment.IsDevelopment()) 
+    builder.Services.InitializeMartenWith<CatalogInitialData>();
+
 builder.Services.AddScoped<GlobalExceptionMiddleware>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("Database")!);
 var app = builder.Build(); //build app
 
 // Configure the HTTP request pipeline.
@@ -34,7 +38,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseMiddleware<GlobalExceptionMiddleware>();
-
+app.UseHealthChecks("/health",
+    new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapCarter();

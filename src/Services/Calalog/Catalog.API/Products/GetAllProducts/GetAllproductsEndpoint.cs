@@ -1,5 +1,6 @@
 ﻿
 using Catalog.API.Products.GetProduct;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Products.GetAllProducts
 {
@@ -7,9 +8,9 @@ namespace Catalog.API.Products.GetAllProducts
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("/GetAllProducts", async (ISender sender) =>
+            app.MapGet("/GetAllProducts", async ([AsParameters] GetAllProductsQuery query, ISender sender) =>
             {
-                var result = await sender.Send(new GetAllProductsQuery());
+                var result = await sender.Send(query);
                 return Results.Ok(result);
             }).WithName("GetAllProducts")
              .Produces<GetAllProductsResult>(StatusCodes.Status200OK)

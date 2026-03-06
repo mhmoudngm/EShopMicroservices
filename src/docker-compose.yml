@@ -3,5 +3,16 @@ version: '3.9'
 services:
   catalogdb:
     image: postgres
+
+  basketdb:
+    image: postgres
+
+  catalog.api:
+    image: ${DOCKER_REGISTRY-}catalogapi
+    build:
+      context: .
+      dockerfile: Services/Calalog/Catalog.API/Dockerfile
+
 volumes:
   postgres_catalog: 
+  postgres_basket: 
