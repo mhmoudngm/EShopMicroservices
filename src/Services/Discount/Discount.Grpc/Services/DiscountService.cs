@@ -32,14 +32,21 @@ namespace Discount.Grpc.Services
         }
         public override async Task<CouponModel> GetDiscount(GetDiscountRequest request, ServerCallContext context)
         {
-            var coupon = dbContext.Coupons.FirstOrDefault(i => i.ProductName == request.ProductName);
-            return new CouponModel()
+            try
             {
-                Description = coupon.Description,
-                Amount = coupon.Amount,
-                ProductName = coupon.ProductName,
-                Id = coupon.Id
-            };
+                var coupon = await dbContext.Coupons.FirstOrDefaultAsync(i => i.ProductName == request.ProductName);
+                return new CouponModel()
+                {
+                    Description = coupon.Description,
+                    Amount = coupon.Amount,
+                    ProductName = coupon.ProductName,
+                    Id = coupon.Id
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public override async Task<CouponModel> UpdateDiscount(UpdateDiscountRequest request, ServerCallContext context)
